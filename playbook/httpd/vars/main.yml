@@ -1,0 +1,3 @@
+---
+# vars file for httpd
+htpd_package_name: apache2

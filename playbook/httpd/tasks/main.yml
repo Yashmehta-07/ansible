@@ -1,0 +1,56 @@
+# ---
+# # tasks file for httpd
+# - name: Update apt package index 
+#   apt:
+#     update_cache: yes
+
+# - name: install httpd
+#   apt:
+#     name: "{{htpd_package_name}}"
+#     state: present
+#   become: true
+
+# - name: place custom html 
+#   copy:
+#     src: files/
+#     dest: /var/www/html/
+#     # recursive: yes
+#   become: true
+
+# - name: start httpd
+#   service:
+#     name: "{{htpd_package_name}}"
+#     state: started
+#     enabled: yes
+#   become: true
+
+
+
+    - name: Update apt package index 
+      apt:
+        update_cache: yes
+
+    - name: Stop Apache service
+      service:
+        name: "{{htpd_package_name}}"
+        state: stopped
+      become: true
+
+    - name: Remove Apache2 package
+      apt:
+        name: "{{htpd_package_name}}"
+        state: absent
+        purge: yes   # This will also remove config files
+      become: true
+
+    - name: Delete /var/www/html/ directory and its contents
+      file:
+        path: /var/www/html/
+        state: absent
+      become: true
+
+    - name: Delete Apache configuration directory
+      file:
+        path: /etc/apache2/
+        state: absent
+      become: true

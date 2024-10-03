@@ -1,0 +1,12 @@
+- name: Install NGINX on EC2
+  hosts: ec2
+  become: yes
+  vars:
+    # Define which OS is running on EC2 (ubuntu, amazon-linux, etc.)
+    ansible_distribution: Ubuntu  # Change to amazon if using Amazon Linux
+  tasks:
+
+    - name: Update apt package index (for Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu'

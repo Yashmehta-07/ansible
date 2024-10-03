@@ -1,0 +1,28 @@
+---
+- name: Configure firewall on EC2
+  hosts: ec2
+  become: yes  # Elevate privileges to install packages and manage firewall
+
+  tasks:
+    - name: Install firewalld and required Python libraries
+      package:
+        name: 
+          - firewalld
+          - python3-firewall
+        state: present
+
+    - name: Start and enable firewalld service
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Enable port 80/tcp in firewall
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+
+    - name: Reload firewall to apply changes
+      firewalld:
+        reload: yes

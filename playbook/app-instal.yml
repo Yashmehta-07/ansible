@@ -1,0 +1,63 @@
+# ---
+# - name: Install and Start the service
+#   hosts: ec2
+#   become: yes
+
+#   tasks:
+#   - name: Update apt package index (for Ubuntu)
+#     apt:
+#       update_cache: yes
+#   - name: Installing nginx
+#     apt:
+#       name: nginx
+#       state: absent
+#       purge: yes  # Ensures config files are removed
+#     register:
+#       result
+#   - name: Starting the nginx service
+#     service:
+#      name: nginx
+#     #  state: stopped
+#      enabled: false 
+
+#   - debug:
+#       var: result
+
+
+---
+- name: Ensure NGINX is fully removed
+  hosts: ec2
+  become: yes
+
+  tasks:
+    - name: Update apt package index (for Ubuntu)
+      apt:
+        update_cache: yes
+
+    - name: Stop NGINX service (if running)
+      service:
+        name: nginx
+        state: stopped
+      ignore_errors: yes
+
+    - name: Disable and mask NGINX service
+      service:
+        name: nginx
+        enabled: false
+        masked: true
+      ignore_errors: yes
+
+    - name: Purge NGINX package
+      apt:
+        name: nginx
+        purge: yes
+        state: absent
+      register: nginx_removal
+
+    - name: Autoremove any leftover dependencies
+      apt:
+        autoremove: yes
+
+    - debug:
+        var: nginx_removal
+

@@ -1,0 +1,18 @@
+---
+- name: File Module
+  hosts: ec2
+
+  tasks:
+  - name: create a file
+    file:
+      path: /home/ubuntu/test
+      state: touch
+      # state: absent    #delete file and folder
+      owner: ubuntu
+      group: ubuntu
+      mode: 600
+
+  - name: create a directory
+    file:
+      path: /home/ubuntu/dir-test
+      state: directory 

@@ -1,0 +1,13 @@
+---
+- name: copy my files
+  hosts: ec2
+
+  tasks:
+  - name: copy files
+    copy:
+     src: /home/yash/Desktop/hetzner-key/ansible.pem
+     dest: /home/ubuntu/
+     owner: paul 
+     mode: 600
+     backup: true
+

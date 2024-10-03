@@ -1,0 +1,24 @@
+---
+- name: download files
+  hosts: ec2
+  become: yes
+
+  tasks:
+  - name: download files
+    get_url:
+      url: https://file-examples.com/storage/feaf6fc38466e98369950a4/2017/10/file_example_JPG_100kB.jpg  
+      dest: /home/ubuntu/image  
+      owner: atul  
+      mode: 0470
+
+  
+  - name: Set owner and permissions for the downloaded file
+    file:
+      path: /home/ubuntu/image
+      owner: atul
+      mode: '0070'
+    register:
+      result
+
+  - debug:
+      var: result

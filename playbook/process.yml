@@ -1,0 +1,27 @@
+---
+
+- name: kill process
+  hosts: ec2
+  become: yes
+
+  tasks:
+  - name: kill process
+    shell: "pgrep nginx | xargs kill" 
+    ignore_errors: yes
+    register: 
+      result
+  
+  - debug:
+      var: result
+
+  - name: start process
+    service:
+      name: nginx
+      state: started
+      enabled: true
+    register:
+      result
+
+  - debug:
+      var: result
+

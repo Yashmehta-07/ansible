@@ -1,0 +1,40 @@
+---
+- name: Install NGINX on EC2
+  hosts: ec2
+  become: yes
+  vars:
+    # Define which OS is running on EC2 (ubuntu, amazon-linux, etc.)
+    ansible_distribution: Ubuntu  # Change to amazon if using Amazon Linux
+  tasks:
+
+    - name: Update apt package index (for Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install NGINX (Ubuntu)
+      apt:
+        name: nginx
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install NGINX (Amazon Linux)
+      yum:
+        name: nginx
+        state: present
+      when: ansible_distribution == 'Amazon Linux'
+
+    - name: Start and enable NGINX service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Ensure NGINX is running
+      command: systemctl status nginx
+      register: nginx_status
+
+    - name: Print NGINX status
+      debug:
+        var: nginx_status
+

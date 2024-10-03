@@ -1,0 +1,6 @@
+---
+- name : roles
+  hosts: ec2
+  become: yes
+  roles:
+    - httpd

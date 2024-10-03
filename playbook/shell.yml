@@ -1,0 +1,20 @@
+---
+- name: Run a shell command
+  hosts: ec2
+
+  tasks:
+  - name: create a file
+    file: 
+      path: /home/ubuntu/test.sh
+      state: touch
+  - name: Run a shell command
+    shell: ./test.sh >> test.log
+    args: 
+      chdir: /home/ubuntu
+      creates: test.log
+    register: result
+    
+  - debug:
+      var: result
+
+  
